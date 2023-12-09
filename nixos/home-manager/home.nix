@@ -1,11 +1,10 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{
-  inputs,
-  lib,
-  config,
-  pkgs,
-  ...
+{ inputs
+, lib
+, config
+, pkgs
+, ...
 }: {
   # You can import other home-manager modules here
   imports = [
@@ -47,95 +46,104 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
   programs = {
-      git = {
-        enable = true;
-        userName = "Chris";
-        userEmail = "chrisberry08@gmail.com";
-      };
-      nushell = {
-        enable = true;
-        extraConfig = ''
-          $env.config = {
-            show_banner: false,
-          }
-        '';
-      };
-      starship = {
-        enable = true;
-      };
-      vscode = {
-        enable = true;
-        extensions = with pkgs.vscode-extensions; [
-          bbenoist.nix
-          github.copilot
-          jnoortheen.nix-ide
-        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "houston";
-            publisher = "astro-build";
-            version = "0.1.2";
-            sha256 = "Xs39Sgrvo20MVXCDet14qsQ9adSfbGrKyMUp6AV1YVk=";
-          }
-        ];
-        userSettings = {
-          "github.copilot.enable" = {
-            "*" = true;
-            "markdown" = false;
-            "plaintext" = false;
-            "scminput" = false;
+    git = {
+      enable = true;
+      userName = "Chris";
+      userEmail = "chrisberry08@gmail.com";
+    };
+    nushell = {
+      enable = true;
+      extraConfig = ''
+        $env.config = {
+          show_banner: false,
+        }
+      '';
+    };
+    starship = {
+      enable = true;
+    };
+    vscode = {
+      enable = true;
+      extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        github.copilot
+        jnoortheen.nix-ide
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "houston";
+          publisher = "astro-build";
+          version = "0.1.2";
+          sha256 = "Xs39Sgrvo20MVXCDet14qsQ9adSfbGrKyMUp6AV1YVk=";
+        }
+      ];
+      userSettings = {
+        "github.copilot.enable" = {
+          "*" = true;
+          "markdown" = false;
+          "plaintext" = false;
+          "scminput" = false;
+        };
+        "window.menuBarVisibility" = "compact";
+        "window.titleBarStyle" = "custom";
+        "workbench.sideBar.location" = "right";
+        "workbench.colorTheme" = "Houston";
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "rnix-lsp";
+        "nix.serverSettings" = {
+          "nil" = {
+            "formatting" = {
+              "command" = [ "nixpkgs-fmt" ];
+            };
           };
-          "window.menuBarVisibility" = "compact";
-          "window.titleBarStyle" = "custom";
-          "workbench.sideBar.location" = "right";
-          "workbench.colorTheme" = "Houston";
         };
       };
     };
+  };
 
-    # Add Firefox GNOME theme directory
-    home.file."firefox-gnome-theme" = {
-      target = ".mozilla/firefox/default/chrome/firefox-gnome-theme";
-      source = (fetchTarball {
-        url ="https://github.com/rafaelmardojai/firefox-gnome-theme/archive/master.tar.gz";
-        sha256="";
-        });
-    };
+  # Add Firefox GNOME theme directory
+  home.file."firefox-gnome-theme" = {
+    target = ".mozilla/firefox/default/chrome/firefox-gnome-theme";
+    source = (fetchTarball {
+      url = "https://github.com/rafaelmardojai/firefox-gnome-theme/archive/master.tar.gz";
+      sha256 = "";
+    });
+  };
 
-    programs.firefox = {
-      enable = true;
-      profiles.default = {
-        name = "Default";
-        settings = {
-          "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      name = "Default";
+      settings = {
+        "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
 
-          # For Firefox GNOME theme:
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "browser.tabs.drawInTitlebar" = true;
-          "svg.context-properties.content.enabled" = true;
-        };
-        userChrome = ''
-          @import "firefox-gnome-theme/userChrome.css";
-          @import "firefox-gnome-theme/theme/colors/dark.css"; 
-        '';
+        # For Firefox GNOME theme:
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "browser.tabs.drawInTitlebar" = true;
+        "svg.context-properties.content.enabled" = true;
       };
+      userChrome = ''
+        @import "firefox-gnome-theme/userChrome.css";
+        @import "firefox-gnome-theme/theme/colors/dark.css"; 
+      '';
     };
+  };
 
-    dconf.settings = {
-      "org/gnome/calculator" = {
-        button-mode = "programming";
-      };
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-      };
+  dconf.settings = {
+    "org/gnome/calculator" = {
+      button-mode = "programming";
     };
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
 
-    gtk = {
-      enable = true;
-      theme = {
-        name = "adw-gtk3-dark";
-        package = pkgs.adw-gtk3;
-      };
+  gtk = {
+    enable = true;
+    theme = {
+      name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3;
     };
+  };
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
