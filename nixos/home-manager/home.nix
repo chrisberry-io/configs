@@ -7,7 +7,7 @@
 , pkgs-unstable
 , ...
 }: let
-  pkgs-unstable.config = { allowUnfree = true; allowUnfreePredicate = _: true;};};
+  pkgs-unstable.config = { allowUnfree = true; allowUnfreePredicate = _: true;};
 in
 {
   # You can import other home-manager modules here
