@@ -15,7 +15,7 @@ in
     ];
 
   # Enable Flakes and the new command-line tool
-  # nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  #nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
 
   # Bootloader.
@@ -97,28 +97,6 @@ in
   #     "figma-linux-0.10.0"
   # ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    zsh
-    gnome.gnome-tweaks
-    dconf
-    adw-gtk3
-    figma-linux
-    micro
-    gh
-    fractal
-    element-desktop
-    pika-backup
-    nil
-    nixpkgs-fmt
-  ]
-  # unstable packages
-  ++ (with unstable; [
-    monaspace
-    obsidian
-  ]);
 
   users.defaultUserShell = pkgs.bash;
 
@@ -136,7 +114,140 @@ in
 
   };
 
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    zsh
+    gnome.gnome-tweaks
+    dconf
+    adw-gtk3
+    figma-linux
+    micro
+    gh
+    fractal
+    element-desktop
+    pika-backup
+    # Packages with configurations
+    #(unstable.vscode-with-extensions.override {
+    # vscodeExtensions = with vscode-extensions; [
+    #  bbenoist.nix
+    #  github.copilot
+    #] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    # {
+    #  name = "houston";
+    # publisher = "astro-build";
+    #version = "0.1.2";
+    #sha256 = "Xs39Sgrvo20MVXCDet14qsQ9adSfbGrKyMUp6AV1YVk=";
+    # }
+    #];
+    # })
+  ]
+  # unstable packages
+  ++ (with unstable; [
+    monaspace
+    obsidian
+  ]);
 
+
+  home-manager.users.chris = {
+    /* The home.stateVersion option does not have a default and must be set */
+    home.stateVersion = "23.11";
+
+    /* Here goes the rest of your home-manager config, e.g. home.packages = [ pkgs.foo ]; */
+
+    nixpkgs.config = {
+      allowUnfree = true;
+    };
+    programs = {
+      git = {
+        enable = true;
+        userName = "Chris";
+        userEmail = "chrisberry08@gmail.com";
+      };
+      nushell = {
+        enable = true;
+        extraConfig = ''
+          $env.config = {
+            show_banner: false,
+          }
+        '';
+      };
+      starship = {
+        enable = true;
+      };
+      vscode = {
+        enable = true;
+        extensions = with unstable.vscode-extensions; [
+          bbenoist.nix
+          github.copilot
+          jnoortheen.nix-ide
+        ] ++ unstable.vscode-utils.extensionsFromVscodeMarketplace [
+          {
+            name = "houston";
+            publisher = "astro-build";
+            version = "0.1.2";
+            sha256 = "Xs39Sgrvo20MVXCDet14qsQ9adSfbGrKyMUp6AV1YVk=";
+          }
+        ];
+        userSettings = {
+          "github.copilot.enable" = {
+            "*" = true;
+            "markdown" = false;
+            "plaintext" = false;
+            "scminput" = false;
+          };
+          "window.menuBarVisibility" = "compact";
+          "window.titleBarStyle" = "custom";
+          "workbench.sideBar.location" = "right";
+          "workbench.colorTheme" = "Houston";
+        };
+      };
+    };
+
+    # Add Firefox GNOME theme directory
+    home.file."firefox-gnome-theme" = {
+      target = ".mozilla/firefox/default/chrome/firefox-gnome-theme";
+      source = (fetchTarball "https://github.com/rafaelmardojai/firefox-gnome-theme/archive/master.tar.gz");
+    };
+
+    programs.firefox = {
+      enable = true;
+      profiles.default = {
+        name = "Default";
+        settings = {
+          "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+
+          # For Firefox GNOME theme:
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "browser.tabs.drawInTitlebar" = true;
+          "svg.context-properties.content.enabled" = true;
+        };
+        userChrome = ''
+          @import "firefox-gnome-theme/userChrome.css";
+          @import "firefox-gnome-theme/theme/colors/dark.css"; 
+        '';
+      };
+    };
+
+    dconf.settings = {
+      "org/gnome/calculator" = {
+        button-mode = "programming";
+      };
+      "org/gnome/desktop/interface" = {
+        color-scheme = "prefer-dark";
+      };
+    };
+
+    gtk = {
+      enable = true;
+      theme = {
+        name = "adw-gtk3-dark";
+        package = pkgs.adw-gtk3;
+      };
+    };
+
+  };
 
   programs.starship.enable = true;
 
@@ -183,4 +294,3 @@ in
   system.stateVersion = "23.05"; # Did you read the comment?
 
 }
-
