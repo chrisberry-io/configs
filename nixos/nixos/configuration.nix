@@ -143,7 +143,6 @@ in
     figma-linux
     micro
     gh
-    fractal
     element-desktop
     pika-backup
     monaspace
@@ -151,6 +150,7 @@ in
     nixpkgs-fmt
   ] ++ (with pkgs-unstable; [
     obsidian
+    fractal
   ]);
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
