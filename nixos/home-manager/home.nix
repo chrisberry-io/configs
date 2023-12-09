@@ -4,8 +4,12 @@
 , lib
 , config
 , pkgs
+, pkgs-unstable
 , ...
-}: {
+}: let
+  pkgs-unstable.config = { allowUnfree = true; allowUnfreePredicate = _: true;};
+in
+{
   # You can import other home-manager modules here
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
@@ -64,6 +68,7 @@
     };
     vscode = {
       enable = true;
+      package = pkgs-unstable.vscode;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         github.copilot
