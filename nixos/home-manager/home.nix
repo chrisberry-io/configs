@@ -6,9 +6,7 @@
 , pkgs
 , pkgs-unstable
 , ...
-}: let
-  pkgs-unstable.config = { allowUnfree = true; allowUnfreePredicate = _: true;};
-in
+}:
 {
   # You can import other home-manager modules here
   imports = [
@@ -68,7 +66,6 @@ in
     };
     vscode = {
       enable = true;
-      package = pkgs-unstable.vscode;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         github.copilot
@@ -88,12 +85,13 @@ in
           "plaintext" = false;
           "scminput" = false;
         };
+        "editor.minimap.enabled" = false;
         "window.menuBarVisibility" = "compact";
-        "window.titleBarStyle" = "custom";
+        "window.titleBarStyle" = "native";
         "workbench.sideBar.location" = "right";
         "workbench.colorTheme" = "Houston";
         "nix.enableLanguageServer" = true;
-        "nix.serverPath" = "rnix-lsp";
+        "nix.serverPath" = "nil";
         "nix.serverSettings" = {
           "nil" = {
             "formatting" = {
@@ -110,7 +108,7 @@ in
     target = ".mozilla/firefox/default/chrome/firefox-gnome-theme";
     source = (fetchTarball {
       url = "https://github.com/rafaelmardojai/firefox-gnome-theme/archive/master.tar.gz";
-      sha256 = "";
+      sha256 = "0jnnay7x5d722nxp89i4a5cj0lm2fn5sap9b92lh5ynp5kbncd6s";
     });
   };
 
