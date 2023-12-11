@@ -4,11 +4,10 @@
 , lib
 , config
 , pkgs
-, pkgs-unstable
 , ...
 }:
 let
-  pkgs-unstable.config = { allowUnfree = true; };
+  pkgs-unstable.config = { allowUnfree = true;};
 in
 {
   # You can import other NixOS modules here
@@ -148,6 +147,8 @@ in
     monaspace
     nil
     nixpkgs-fmt
+    steam-run
+    wget
   ] ++ (with pkgs-unstable; [
     obsidian
     fractal
