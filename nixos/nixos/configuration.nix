@@ -7,7 +7,7 @@
 , ...
 }:
 let
-  pkgs-unstable.config = { allowUnfree = true; };
+  # pkgs-unstable.config = { allowUnfree = true; };
 in
 {
   # You can import other NixOS modules here
@@ -106,9 +106,6 @@ in
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
-      permittedInsecurePackages = [
-        "electron-25.9.0"
-      ];
     };
   };
 
@@ -152,9 +149,8 @@ in
     wget
     obsidian
     gnomeExtensions.tailscale-qs
-  ] ++ (with pkgs-unstable; [
     fractal
-  ]);
+  ];
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
