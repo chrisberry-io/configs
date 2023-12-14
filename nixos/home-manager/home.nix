@@ -87,7 +87,7 @@
         };
         "editor.minimap.enabled" = false;
         "window.menuBarVisibility" = "compact";
-        "window.titleBarStyle" = "native";
+        "window.titleBarStyle" = "custom";
         "workbench.sideBar.location" = "right";
         "workbench.colorTheme" = "Houston";
         "nix.enableLanguageServer" = true;
@@ -137,6 +137,11 @@
     };
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+    };
+    "org/gnome/shell" = {
+      enabled-extensions = [
+      "tailscale@joaophi.github.com"
+    ];
     };
   };
 

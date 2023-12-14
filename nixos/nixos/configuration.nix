@@ -7,7 +7,7 @@
 , ...
 }:
 let
-  pkgs-unstable.config = { allowUnfree = true;};
+  pkgs-unstable.config = { allowUnfree = true; };
 in
 {
   # You can import other NixOS modules here
@@ -106,6 +106,9 @@ in
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-25.9.0"
+      ];
     };
   };
 
@@ -139,18 +142,17 @@ in
     gnome.gnome-tweaks
     dconf
     adw-gtk3
-    figma-linux
+    # figma-linux
     micro
     gh
-    element-desktop
     pika-backup
     monaspace
     nil
     nixpkgs-fmt
-    steam-run
     wget
-  ] ++ (with pkgs-unstable; [
     obsidian
+    gnomeExtensions.tailscale-qs
+  ] ++ (with pkgs-unstable; [
     fractal
   ]);
 
@@ -164,6 +166,7 @@ in
       isNormalUser = true;
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups = [ "wheel" ];
+      shell = pkgs.nushell;
     };
   };
 
@@ -175,6 +178,10 @@ in
       # Forbid root login through SSH.
       PermitRootLogin = "no";
     };
+  };
+
+  services.tailscale = {
+    enable = true;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
